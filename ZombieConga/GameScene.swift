@@ -84,7 +84,7 @@ class GameScene: SKScene {
     func sceneTouched(touchLocation:CGPoint) {
         lastTouchLocation = touchLocation
         moveZombieToward(touchLocation)
-    }ef'v3;nv13l;fh;kjf;4jv;vj'
+    }
     
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
         let touch = touches.anyObject() as UITouch
