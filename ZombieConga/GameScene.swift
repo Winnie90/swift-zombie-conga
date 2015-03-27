@@ -57,7 +57,7 @@ class GameScene: SKScene {
     }
     
     override func didMoveToView(view: SKView) {
-        //Good place to do initial setup
+        //initial setup
         backgroundColor = SKColor.whiteColor()
     
         // set background add it to screen
@@ -277,13 +277,13 @@ class GameScene: SKScene {
         var targetPosition = zombie.position
         enumerateChildNodesWithName("train") { node, _ in
             if !node.hasActions() {
+                
                 let actionDuration = 0.3
                 let offset = targetPosition - node.position
-                let length = sqrt(Double(offset.x * offset.x + offset.y * offset.y))
-                let direction = offset / CGFloat(length)
-                let amountToMovePerSec = self.catMovePointsPerSec / CGFloat(actionDuration)
-                let amountToMove = direction * amountToMovePerSec
-                let moveAction = SKAction.moveTo(direction, duration:NSTimeInterval(amountToMovePerSec))
+                let direction = offset.normalized()
+                let amountToMovePerSec = direction * self.catMovePointsPerSec
+                let amountToMove = amountToMovePerSec * CGFloat(actionDuration)
+                let moveAction = SKAction.moveByX(amountToMove.x, y: amountToMove.y, duration: actionDuration)
                 node.runAction(moveAction)
             }
             targetPosition = node.position
