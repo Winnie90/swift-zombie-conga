@@ -86,14 +86,14 @@ class GameScene: SKScene {
         moveZombieToward(touchLocation)
     }
     
-    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
-        let touch = touches.anyObject() as UITouch
+    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+        let touch = touches.first as! UITouch
         let touchLocation = touch.locationInNode(self)
         sceneTouched(touchLocation)
     }
     
-    override func touchesMoved(touches: NSSet, withEvent event: UIEvent) {
-        let touch = touches.anyObject() as UITouch
+    override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
+        let touch = touches.first as! UITouch
         let touchLocation = touch.locationInNode(self)
         sceneTouched(touchLocation)
     }
@@ -251,7 +251,7 @@ class GameScene: SKScene {
     func checkCollisions() {
         var hitCats: [SKSpriteNode] = []
         enumerateChildNodesWithName("cat"){ node, _ in
-            let cat = node as SKSpriteNode
+            let cat = node as! SKSpriteNode
             if CGRectIntersectsRect(cat.frame, self.zombie.frame) {
                 hitCats.append(cat)
             }
@@ -262,7 +262,7 @@ class GameScene: SKScene {
         if invincible == false{
             var hitEnemies: [SKSpriteNode] = []
             enumerateChildNodesWithName("enemy") { node, _ in
-                let enemy = node as SKSpriteNode
+                let enemy = node as! SKSpriteNode
                 if CGRectIntersectsRect(CGRectInset(node.frame, 20, 20), self.zombie.frame) {
                     hitEnemies.append(enemy)
                 }
