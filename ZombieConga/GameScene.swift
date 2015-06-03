@@ -84,7 +84,7 @@ class GameScene: SKScene {
         backgroundLayer.addChild(zombie)
         
         // setup enemies
-        runAction(SKAction.repeatActionForever( SKAction.sequence([SKAction.runBlock(spawnEnemy), SKAction.waitForDuration(2.0)])))
+        runAction(SKAction.repeatActionForever( SKAction.sequence([SKAction.runBlock(spawnEnemy), SKAction.waitForDuration(4.0)])))
         
         // setup cats
         runAction(SKAction.repeatActionForever( SKAction.sequence([SKAction.runBlock(spawnCat), SKAction.waitForDuration(1.0)])))
@@ -126,7 +126,7 @@ class GameScene: SKScene {
             )
             if backgroundScreenPos.x <= -background!.size.width {
                 background!.position = CGPoint(
-                    x: background!.position.x + background!.size.width,
+                    x: background!.position.x + background!.size.width*2,
                     y: background!.position.y
                 )
             }
@@ -138,17 +138,29 @@ class GameScene: SKScene {
         moveZombieToward(touchLocation)
     }
     
-    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
-        let touch = touches.first as! UITouch
-        let touchLocation = touch.locationInNode(backgroundLayer)
-        sceneTouched(touchLocation)
-    }
+    #if os(iOS)
+        override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+            let touch = touches.first as! UITouch
+            let touchLocation = touch.locationInNode(backgroundLayer)
+            sceneTouched(touchLocation)
+        }
     
-    override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
-        let touch = touches.first as! UITouch
-        let touchLocation = touch.locationInNode(self)
-        sceneTouched(touchLocation)
-    }
+        override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
+            let touch = touches.first as! UITouch
+            let touchLocation = touch.locationInNode(backgroundLayer)
+            sceneTouched(touchLocation)
+        }
+    #else
+        override func mouseDown(theEvent:NSEvent){
+            let touchLocation = theEvent.locationInNode(backgroundLayer)
+            sceneTouched(touchLocation)
+        }
+        
+        override func mouseDragged(theEvent:NSEvent){
+            let touchLocation = theEvent.locationInNode(backgroundLayer)
+            sceneTouched(touchLocation)
+        }
+    #endif
     
     override func update(currentTime: NSTimeInterval) {
         if lastUpdateTime > 0 {
@@ -247,7 +259,7 @@ class GameScene: SKScene {
             x: -enemy.size.width/2,
             y: enemyScenePos.y
         )
-        let actionMove = SKAction.moveTo(backgroundLayer.convertPoint(enemyDestination, fromNode: self), duration: 2.0)
+        let actionMove = SKAction.moveTo(backgroundLayer.convertPoint(enemyDestination, fromNode: self), duration: 3.0)
         //let actionMove = SKAction.moveToX(-enemy.size.width/2, duration: 2.0)
         let actionRemove = SKAction.removeFromParent()
         enemy.runAction(SKAction.sequence([actionMove, actionRemove]))
